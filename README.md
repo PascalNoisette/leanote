@@ -1,9 +1,16 @@
-# Leanote
+## Markdown fork
+
+Replacement of backend database with plain text files.
+
+This is a fork of https://github.com/leanote/leanote/ - Under GPL v2 and https://github.com/jim3ma/docker-leanote.git - Under Apache License Version 2.0
+The next two chapter are a backup of original readme of their respective project
+
+## Leanote
 
 [![Build Status](https://travis-ci.org/leanote/leanote.svg)](https://travis-ci.org/leanote/leanote)
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/leanote/leanote?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
-## 1. Introduction
+### 1. Introduction
 
 Leanote, not just a notepad!
 ![leanote.png](leanote.png "")
@@ -25,7 +32,7 @@ Leanote, not just a notepad!
 * Batch note operation
 * Customizable themes for blogging
 
-## 2. Why we create Leanote
+### 2. Why we create Leanote
 
 We have been using the popular note-taking software/service `Evernote` as our knowledge management tool on a daily basis. Benefited from and inspired by `Evernote`, we decided to create a brand-new tool that provides everything `Evernote` has to offer, plus a bunch of new features that `Evernote` failed to deliver, such as:
 
@@ -36,7 +43,7 @@ We have been using the popular note-taking software/service `Evernote` as our kn
 * A complete and all-platform (sorry Windows phone) covering software suite: that includes Leanote Web & Server (this repository), [Desktop app](https://github.com/leanote/desktop-app), [iOS](https://github.com/leanote/leanote-ios), [Android](https://github.com/leanote/leanote-android). And they are all open source!
 * ......
 
-## 3. How to get Leanote
+### 3. How to get Leanote
 
 The Leanote software suite contains: Leanote Web & Server (this repository), [Desktop app](https://github.com/leanote/desktop-app), [iOS](https://github.com/leanote/leanote-ios), [Android](https://github.com/leanote/leanote-android). 
 
@@ -53,17 +60,17 @@ More information about how to install Leanote please see:
     * [Windows](https://github.com/leanote/leanote/wiki/leanote-source-installation-on-Windows-(En))
     * [Mac and Linux](https://github.com/leanote/leanote/wiki/Leanote-source-installation-on-Mac-and-Linux-(En))
 
-## 4. Documentation
+### 4. Documentation
 
 Please see [wiki](https://github.com/leanote/leanote/wiki) for detailed instruction on how to install Leanote on various platforms, trouble shooting and configuration explanations.
 
 
-## 5. How to develop Leanote
+### 5. How to develop Leanote
 
 If you are a developer yourself and feel like to build on top of Leanote, please refer to [How-to-develop-leanote](https://github.com/leanote/leanote/wiki/How-to-develop-leanote-%E5%A6%82%E4%BD%95%E5%BC%80%E5%8F%91leanote).
 
 
-## 6. Contributions
+### 6. Contributions
 
 Like or dislike Leanote, please leave your comments and suggestions to help us improve it.
 If you encounter any issue, we suggest you first search the issues section to see whether a solution already exists, or open up a new one otherwise.
@@ -71,19 +78,19 @@ If you encounter any issue, we suggest you first search the issues section to se
 We’d like to acknowledge the contributions made by our [developers and contributors](https://github.com/leanote/leanote/graphs/contributors) to
 this project. Leanote won’t exist without your hard work. Your help is much appreciated.
 
-## 7. Join us
+### 7. Join us
 
 Please feel free to fork this repository and contribute back using [pull requests](https://github.com/leanote/leanote/pulls).
 
 If you find any problems or have any good ideas, feature requests, please submit here [issues](https://github.com/leanote/leanote/issues).
 
 
-## 8. Donation
+### 8. Donation
 
 If you like our product, consider supporting us via [donate us](http://leanote.org/#donate).
 We acknowledge the donations made by all the [donators](http://leanote.leanote.com/post/leanote-donation-list).
 
-## 9. Related projects
+### 9. Related projects
 
 * [Leanote Desktop App](https://github.com/leanote/desktop-app), [Download](http://app.leanote.com)
 * [Leanote iOS](https://github.com/leanote/leanote-ios), [Download From App Store](https://itunes.apple.com/en/app/leanote/id1022302858?mt=8)
@@ -91,7 +98,7 @@ We acknowledge the donations made by all the [donators](http://leanote.leanote.c
 
 You are welcome to join us.
 
-## 10. Contacts
+### 10. Contacts
 
 * Email: leanote@leanote.com
 * [Leanote BBS](http://bbs.leanote.com)
@@ -100,9 +107,9 @@ You are welcome to join us.
 
 -----------------------------------------------------------------------
 
-# Leanote
+## Leanote
 
-## 1. 介绍
+### 1. 介绍
 
 Leanote, 不只是笔记!
 
@@ -123,7 +130,7 @@ Leanote, 不只是笔记!
 * 支持批量操作
 * 博客自定义主题, 实现高度定制化
 
-## 2. 为什么我们要创建Leanote?
+### 2. 为什么我们要创建Leanote?
 我们都曾是`Evernote`的忠实粉丝, 一直以来`Evernote`都是我们日常知识管理的有效工具。于是我们决定重新创造一款工具，提供`Evernote`所能提供的功能，同时弥补`Evernote`的不足，比如：
 * 功能更强的文本编辑器：`Evernote`的编辑器不能满足我们的需求, 不能实现文档导航、不能贴代码(格式会乱掉, 作为程序员, 代码是我们的基本需求啊), 图片不能缩放等。
 * `Evernote` 不支持所有人都喜爱的markdown语法，于是我们为Leanote配备了一款可以实时渲染的markdown编辑器。
@@ -132,7 +139,7 @@ Leanote, 不只是笔记!
 * 一套完整的、全平台覆盖的软件套装，包括了web、桌面、安卓、IOS设备，而且全部开源！
 * 还有...
 
-## 3. 获取Leanote
+### 3. 获取Leanote
 
 Leanote云笔记产品包括: Leanote Web & Server(即本仓库), 桌面客户端, IOS, android. 4端全部开源! 
 
@@ -148,19 +155,19 @@ Leanote云笔记产品包括: Leanote Web & Server(即本仓库), 桌面客户�
     * [Windows](https://github.com/leanote/leanote/wiki/Leanote-%E6%BA%90%E7%A0%81%E7%89%88%E8%AF%A6%E7%BB%86%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B----Windows)
     * [Mac, Linux](https://github.com/leanote/leanote/wiki/leanote%E5%BC%80%E5%8F%91%E7%89%88%E8%AF%A6%E7%BB%86%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B)
 
-## 4. 相关文档
+### 4. 相关文档
 
 更多详细的安装说明、问题处理和配置说明文档，请查看 [wiki](https://github.com/leanote/leanote/wiki)。
 
-## 5. 如何对Leanote进行二次开发
+### 5. 如何对Leanote进行二次开发
 
 如果您有兴趣基于Leanote二次开发，请查看 [How-to-develop-Leanote](https://github.com/leanote/leanote/wiki/How-to-develop-leanote-%E5%A6%82%E4%BD%95%E5%BC%80%E5%8F%91leanote)。
 
-## 6. 贡献者
+### 6. 贡献者
 
 在此对向Leanote贡献力量的[贡献者们](https://github.com/leanote/leanote/graphs/contributors) 表示感谢。Leanote因有你们而更完美!
 
-## 7. 加入我们
+### 7. 加入我们
 
 欢迎提交[pull requests](https://github.com/leanote/leanote/pulls) 到Leanote。
 
@@ -168,21 +175,93 @@ Leanote云笔记产品包括: Leanote Web & Server(即本仓库), 桌面客户�
 
 Leanote还有很多问题, 如果你喜欢它, 欢迎加入我们一起完善Leanote。
 
-## 8. 捐赠
+### 8. 捐赠
 
 如果您喜欢我们的产品，请考虑支持我们, [捐赠Leanote](http://leanote.org/#donate)。
 
 感谢[这些捐赠者](http://leanote.leanote.com/post/leanote-donation-list), 谢谢你们的鼓励, Leanote会一直坚持!
 
-## 9. 其它相关项目
+### 9. 其它相关项目
 * [Leanote Desktop App](https://github.com/leanote/desktop-app), [下载地址](http://app.leanote.com)
 * [Leanote iOS](https://github.com/leanote/leanote-ios), [从App Store下载](https://itunes.apple.com/zn/app/leanote/id1022302858?mt=8)
 * [Leanote Android](https://github.com/leanote/leanote-android), 开发阶段
 
 欢迎加入我们!
 
-## 联系&加入我们
+### 联系&加入我们
 * Email: leanote@leanote.com
 * [Leanote 社区](http://bbs.leanote.com)
 * [QQ群](http://leanote.leanote.com/post/Leanote-groups)
 * [Leanote Google Group](https://groups.google.com/forum/#!forum/leanote)
+## Leanote Docker Image
+
+[![Docker Build Status](https://img.shields.io/docker/build/jim3ma/leanote.svg)](https://hub.docker.com/r/jim3ma/leanote/) [![Docker Automated build](https://img.shields.io/docker/automated/jim3ma/leanote.svg)](https://hub.docker.com/r/jim3ma/leanote/) [![Docker Stars](https://img.shields.io/docker/stars/jim3ma/leanote.svg)](https://hub.docker.com/r/jim3ma/leanote/) [![Docker Pulls](https://img.shields.io/docker/pulls/jim3ma/leanote.svg)](https://hub.docker.com/r/jim3ma/leanote/)
+
+All data is in /leanote/data volume. We can mount local data folder for this volume.
+More details from this [wiki](https://github.com/leanote/leanote/wiki)
+
+### Supported tags and respective `Dockerfile` links
+
+* latest, full-featured, full-featured-2.6.1 ([Dockerfile](https://github.com/jim3ma/docker-leanote/blob/2.6.1/Dockerfile))
+* alpine, alpine-2.6.1 ([Dockerfile](https://github.com/jim3ma/docker-leanote/blob/2.6.1/Dockerfile.alpine))
+* full-featured-2.6 ([Dockerfile](https://github.com/jim3ma/docker-leanote/blob/2.6/Dockerfile))
+* alpine-2.6 ([Dockerfile](https://github.com/jim3ma/docker-leanote/blob/2.6/Dockerfile.alpine))
+* full-featured-2.5 ([Dockerfile](https://github.com/jim3ma/docker-leanote/blob/2.5/Dockerfile))
+* alpine-2.5 ([Dockerfile](https://github.com/jim3ma/docker-leanote/blob/2.5/Dockerfile.alpine))
+* full-featured-2.4 ([Dockerfile](https://github.com/jim3ma/docker-leanote/blob/2.4/Dockerfile))
+* alpine-2.4 ([Dockerfile](https://github.com/jim3ma/docker-leanote/blob/2.4/Dockerfile.alpine))
+* full-featured-2.2.1 ([Dockerfile](https://github.com/jim3ma/docker-leanote/blob/2.2.1/Dockerfile))
+* alpine-2.2.1 ([Dockerfile](https://github.com/jim3ma/docker-leanote/blob/2.2.1/Dockerfile.alpine))
+
+#### About full-featured images
+
+The latest and full-featured image contain **wkhtmltopdf** for export pdf.
+
+### How to use this image
+
+#### 1. Initial mongo data
+
+[Click here](http://t.cn/Rop6ROb)
+
+#### 2. Update mongo config in app.conf
+
+Download app.conf from [Here](https://raw.githubusercontent.com/leanote/leanote/master/conf/app.conf)
+
+Then update mongo section:
+
+```
+# mongdb
+db.host=127.0.0.1
+db.port=27017
+db.dbname=leanote # required
+db.username= # if not exists, please leave it blank
+db.password= # if not exists, please leave it blank
+# or you can set the mongodb url for more complex needs the format is:
+# mongodb://myuser:mypass@localhost:40001,otherhost:40001/mydb
+# db.url=mongodb://root:root123@localhost:27017/leanote
+# db.urlEnv=${MONGODB_URL} # set url from env. eg. mongodb://root:root123@localhost:27017/leanote
+```
+
+#### 3. Create data folder
+
+```
+mkdir -p leanote-data/{files,mongodb_backup,public/upload}
+```
+
+#### 4. Edit docker-compose.yml
+
+```
+version: '2'
+services:
+  leanote:
+    image: jim3ma/leanote:full-featured-2.4
+    network_mode: "host"
+    volumes:
+      - ./leanote-data:/leanote/data
+      - ./app.conf:/leanote/conf/app.conf
+    restart: always
+```
+
+#### 5. docker-compose up -d
+
+
