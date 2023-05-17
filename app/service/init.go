@@ -1,14 +1,14 @@
 package service
 
 import (
-	"github.com/leanote/leanote/app/db"
-	. "github.com/leanote/leanote/app/lea"
-	"gopkg.in/mgo.v2"
-	"gopkg.in/mgo.v2/bson"
 	"net/url"
 	"regexp"
 	"strconv"
 	"strings"
+
+	"github.com/leanote/leanote/app/db"
+	. "github.com/leanote/leanote/app/lea"
+	"gopkg.in/mgo.v2/bson"
 )
 
 // init service, for share service bettween services
@@ -135,7 +135,7 @@ func getUniqueUrlTitle(userId string, urlTitle string, types string, padding int
 	}
 	userIdO := bson.ObjectIdHex(userId)
 
-	var collection *mgo.Collection
+	var collection db.CollectionLike
 	if types == "note" {
 		collection = db.Notes
 	} else if types == "notebook" {
