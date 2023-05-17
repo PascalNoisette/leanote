@@ -1,0 +1,1 @@
+Based on source code from https://github.com/leanote/leanote/ - Under GPL v2
