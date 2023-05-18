@@ -109,64 +109,64 @@ func Init(url, dbname string) {
 	}
 
 	// notebook
-	Notebooks = &FileUsers{Name: "notebooks", Dir: dir}
+	Notebooks = &BsonReader{Name: "notebooks", Dir: dir}
 
 	// notes
-	Notes = &FileUsers{Name: "notes", Dir: dir}
+	Notes = &BsonReader{Name: "notes", Dir: dir}
 
 	// noteContents
-	NoteContents = &FileUsers{Name: "note_contents", Dir: dir}
-	NoteContentHistories = &FileUsers{Name: "note_content_histories", Dir: dir}
+	NoteContents = &BsonReader{Name: "note_contents", Dir: dir}
+	NoteContentHistories = &BsonReader{Name: "note_content_histories", Dir: dir}
 
 	// share
-	ShareNotes = &FileUsers{Name: "share_notes", Dir: dir}
-	ShareNotebooks = &FileUsers{Name: "share_notebooks", Dir: dir}
-	HasShareNotes = &FileUsers{Name: "has_share_notes", Dir: dir}
+	ShareNotes = &BsonReader{Name: "share_notes", Dir: dir}
+	ShareNotebooks = &BsonReader{Name: "share_notebooks", Dir: dir}
+	HasShareNotes = &BsonReader{Name: "has_share_notes", Dir: dir}
 
 	// user
-	Users = &FileUsers{Name: "users", Dir: dir}
+	Users = &BsonReader{Name: "users", Dir: dir}
 	// group
-	Groups = &FileUsers{Name: "groups", Dir: dir}
-	GroupUsers = &FileUsers{Name: "group_users", Dir: dir}
+	Groups = &BsonReader{Name: "groups", Dir: dir}
+	GroupUsers = &BsonReader{Name: "group_users", Dir: dir}
 
 	// blog
-	Blogs = &FileUsers{Name: "blogs", Dir: dir}
+	Blogs = &BsonReader{Name: "blogs", Dir: dir}
 
 	// tag
-	Tags = &FileUsers{Name: "tags", Dir: dir}
-	NoteTags = &FileUsers{Name: "note_tags", Dir: dir}
-	TagCounts = &FileUsers{Name: "tag_count", Dir: dir}
+	Tags = &BsonReader{Name: "tags", Dir: dir}
+	NoteTags = &BsonReader{Name: "note_tags", Dir: dir}
+	TagCounts = &BsonReader{Name: "tag_count", Dir: dir}
 
 	// blog
-	UserBlogs = &FileUsers{Name: "user_blogs", Dir: dir}
-	BlogSingles = &FileUsers{Name: "blog_singles", Dir: dir}
-	Themes = &FileUsers{Name: "themes", Dir: dir}
+	UserBlogs = &BsonReader{Name: "user_blogs", Dir: dir}
+	BlogSingles = &BsonReader{Name: "blog_singles", Dir: dir}
+	Themes = &BsonReader{Name: "themes", Dir: dir}
 
 	// find password
-	Tokens = &FileUsers{Name: "tokens", Dir: dir}
+	Tokens = &BsonReader{Name: "tokens", Dir: dir}
 
 	// Suggestion
-	Suggestions = &FileUsers{Name: "suggestions", Dir: dir}
+	Suggestions = &BsonReader{Name: "suggestions", Dir: dir}
 
 	// Album & file
-	Albums = &FileUsers{Name: "albums", Dir: dir}
-	Files = &FileUsers{Name: "files", Dir: dir}
-	Attachs = &FileUsers{Name: "attachs", Dir: dir}
+	Albums = &BsonReader{Name: "albums", Dir: dir}
+	Files = &BsonReader{Name: "files", Dir: dir}
+	Attachs = &BsonReader{Name: "attachs", Dir: dir}
 
-	NoteImages = &FileUsers{Name: "note_images", Dir: dir}
+	NoteImages = &BsonReader{Name: "note_images", Dir: dir}
 
-	Configs = &FileUsers{Name: "configs", Dir: dir}
-	EmailLogs = &FileUsers{Name: "email_logs", Dir: dir}
+	Configs = &BsonReader{Name: "configs", Dir: dir}
+	EmailLogs = &BsonReader{Name: "email_logs", Dir: dir}
 
 	// 社交
-	BlogLikes = &FileUsers{Name: "blog_likes", Dir: dir}
-	BlogComments = &FileUsers{Name: "blog_comments", Dir: dir}
+	BlogLikes = &BsonReader{Name: "blog_likes", Dir: dir}
+	BlogComments = &BsonReader{Name: "blog_comments", Dir: dir}
 
 	// 举报
-	Reports = &FileUsers{Name: "reports", Dir: dir}
+	Reports = &BsonReader{Name: "reports", Dir: dir}
 
 	// mgo.Session
-	Sessions = &FileUsers{Name: "sessions", Dir: dir}
+	Sessions = &BsonReader{Name: "sessions", Dir: dir}
 }
 
 func close() {
