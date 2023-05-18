@@ -5,6 +5,14 @@ Replacement of backend database with plain text files.
 This is a fork of https://github.com/leanote/leanote/ - Under GPL v2 and https://github.com/jim3ma/docker-leanote.git - Under Apache License Version 2.0
 The next two chapter are a backup of original readme of their respective project
 
+### Test with docker
+
+```
+docker build . -t leanote
+docker run -p9000:9000 -v /home/pascal/workspace/leanote/:/home/pascal/workspace/leanote/ --rm leanote
+```
+
+
 ## Leanote
 
 [![Build Status](https://travis-ci.org/leanote/leanote.svg)](https://travis-ci.org/leanote/leanote)
