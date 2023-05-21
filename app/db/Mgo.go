@@ -99,17 +99,8 @@ func Init(url, dbname string) {
 		panic(err)
 	}
 
-	//test
-	files, err := dir.Readdir(0)
-	if err != nil {
-		panic(err)
-	}
-	for _, file := range files {
-		fmt.Println(file.Name())
-	}
-
 	// notebook
-	Notebooks = &BsonReader{Name: "notebooks", Dir: dir}
+	Notebooks = &FolderNotebooks{Name: "notebooks", Dir: dir, Fallback: &BsonReader{Name: "notebooks", Dir: dir}}
 
 	// notes
 	Notes = &BsonReader{Name: "notes", Dir: dir}

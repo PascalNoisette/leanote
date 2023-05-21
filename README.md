@@ -30,7 +30,16 @@ squidfunk:
   password_hash: b71a4cd635e0ea3e43adcc1e0c755416
 ```
 
-Multiple account is not implemented and only the password is checked against the password_hash.
+Multiple account is not implemented and only the password is checked against the password_hash. User administration is not implemented.
+
+
+### Notebook
+
+Notebook correspond to a level-1 subfolder inside the mkdocs https://squidfunk.github.io/mkdocs-material/getting-started/ folder.
+
+Notebook creation is not implemented.
+
+
 
 ## Leanote
 
