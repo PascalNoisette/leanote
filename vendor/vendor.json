@@ -175,6 +175,12 @@
 			"path": "gopkg.in/natefinch/lumberjack.v2",
 			"revision": "a96e63847dc3c67d17befa69c303767e2f84e54f",
 			"revisionTime": "2017-05-31T16:03:50Z"
+		},
+		{
+			"checksumSHA1": "Pa5eVnCcZflNxcvIT/yVqns2Sdw=",
+			"path": "gopkg.in/yaml.v3",
+			"revision": "f6f7691b1fdeb513f56608cd2c32c51f8194bf51",
+			"revisionTime": "2022-05-27T08:35:30Z"
 		}
 	],
 	"rootPath": "github.com/leanote/leanote"
