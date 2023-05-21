@@ -5,9 +5,9 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"reflect"
 
 	"gopkg.in/mgo.v2"
-	"gopkg.in/mgo.v2/bson"
 )
 
 type BsonReader struct {
@@ -76,38 +76,46 @@ func (c *BsonReader) Distinct(key string, result interface{}) error {
 }
 
 func (c *BsonReader) One(result interface{}) error {
-	var nodelist map[string]interface{}
-	var err = c.All(nodelist)
+	filePath := filepath.Join("/leanote/mongodb_backup/leanote_install_data", c.Name+".bson")
+	data, err := ioutil.ReadFile(filePath)
+
 	if err != nil {
-		return err
+		panic(err)
 	}
-	for _, v := range nodelist {
-		var data, err = bson.Marshal(v)
-		if err != nil {
-			return err
-		}
-		err = bson.Unmarshal(data, result)
-		fmt.Println("Found one " + c.Name)
-		fmt.Println(result)
-		if err != nil {
-			return err
-		}
+
+	for {
+		valuePtr := reflect.ValueOf(result)
+		d := NewDecoder(data)
+		d.readDocTo(valuePtr)
 		break
 	}
-	fmt.Println("Found none " + c.Name)
+	fmt.Println(result)
+
 	return nil
 }
 
 func (c *BsonReader) All(result interface{}) error {
 	filePath := filepath.Join("/leanote/mongodb_backup/leanote_install_data", c.Name+".bson")
 	data, err := ioutil.ReadFile(filePath)
+	/* item */
+	value := reflect.New(reflect.TypeOf(result).Elem().Elem())
+	valuePtr := reflect.ValueOf(result)
+	nodelist := valuePtr.Elem()
+
 	if err != nil {
 		panic(err)
 	}
+	d := NewDecoder(data)
+	for {
+		d.readDocTo(value)
+		nodelist.Set(reflect.Append(nodelist, value.Elem()))
 
-	err = bson.Unmarshal(data, &result)
-	fmt.Println(result)
-	return err
+		if d.i >= len(d.in) {
+			break
+		}
+	}
+
+	return nil
 }
 
 func (c *BsonReader) UpdateAll(selector interface{}, update interface{}) (info *mgo.ChangeInfo, err error) {
