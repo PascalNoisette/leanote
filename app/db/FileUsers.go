@@ -1,27 +1,28 @@
 package db
 
 import (
-	"bytes"
-	"encoding/gob"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"reflect"
 
 	"github.com/leanote/leanote/app/info"
 	"gopkg.in/mgo.v2"
-	"gopkg.in/mgo.v2/bson"
 	"gopkg.in/yaml.v3"
 )
 
 type FileUsers struct {
 	CollectionLike
-	Dir  *os.File
-	Name string // "collection"
+	Dir      *os.File
+	Name     string // "collection"
+	Fallback CollectionLike
 }
 type Author struct {
 	Name        string `yaml:"name"`
 	Description string `yaml:"description"`
 	Avatar      string `yaml:"avatar"`
+	Pwd         string `yaml:"password_hash"`
 }
 
 func (c *FileUsers) FindId(id interface{}) CollectionLike {
@@ -67,39 +68,46 @@ func (c *FileUsers) Distinct(key string, result interface{}) error {
 }
 
 func (c *FileUsers) One(result interface{}) (err error) {
+	c.Fallback.One(result)
 	var m = c.ReadFile()
-
 	for k, v := range m {
-		buf := &bytes.Buffer{}
-		gob.NewEncoder(buf).Encode(k)
-		var res = info.User{UserId: bson.ObjectId(buf.Bytes()), Username: v.Name}
-		result = res
+		c.DeepCopy(k, v, result.(*info.User))
+		break
 	}
-
 	return nil
 }
 
 func (c *FileUsers) All(result interface{}) error {
+	fallbackData := info.User{}
+	c.Fallback.One(&fallbackData)
+
 	var m = c.ReadFile()
 
-	var i = len(m)
-	var res = make([]info.User, i)
+	valuePtr := reflect.ValueOf(result)
+	nodelist := valuePtr.Elem()
 	for k, v := range m {
-		i = i - 1
-		buf := &bytes.Buffer{}
-		gob.NewEncoder(buf).Encode(k)
-		res[i] = info.User{UserId: bson.ObjectId(buf.Bytes()), Username: v.Name}
+		c.DeepCopy(k, v, &fallbackData)
+		x := reflect.ValueOf(fallbackData)
+		nodelist.Set(reflect.Append(nodelist, x))
 	}
-	result = res
 	return nil
 }
-
+func (c *FileUsers) DeepCopy(username string, in Author, out *info.User) {
+	out.Username = username
+	out.UsernameRaw = username
+	if len(in.Pwd) == 32 {
+		out.Pwd = in.Pwd
+	} else {
+		fmt.Fprintf(os.Stderr, "Invalid md5sum hash for password_hash found in .authors.yml\n")
+	}
+}
 func (c *FileUsers) ReadFile() map[string]Author {
 	filePath := filepath.Join(c.Dir.Name(), ".authors.yml")
 
 	data, err := ioutil.ReadFile(filePath)
 	if err != nil {
-		panic(err)
+		fmt.Fprintf(os.Stderr, ".authors.yml not found\n")
+		return nil
 	}
 
 	var m map[string]Author

@@ -124,7 +124,7 @@ func Init(url, dbname string) {
 	HasShareNotes = &BsonReader{Name: "has_share_notes", Dir: dir}
 
 	// user
-	Users = &BsonReader{Name: "users", Dir: dir}
+	Users = &FileUsers{Name: "users", Dir: dir, Fallback: &BsonReader{Name: "users", Dir: dir}}
 	// group
 	Groups = &BsonReader{Name: "groups", Dir: dir}
 	GroupUsers = &BsonReader{Name: "group_users", Dir: dir}

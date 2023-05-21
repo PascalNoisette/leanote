@@ -1,6 +1,6 @@
 ## Markdown fork
 
-Replacement of backend database with plain text files.
+Replacement of backend database with markdown files organised in a  way to be compatible with mkdocs https://squidfunk.github.io/mkdocs-material/.
 
 This is a fork of https://github.com/leanote/leanote/ - Under GPL v2 and https://github.com/jim3ma/docker-leanote.git - Under Apache License Version 2.0
 The next two chapter are a backup of original readme of their respective project
@@ -12,6 +12,25 @@ docker build . -t leanote
 docker run -p9000:9000 -v /home/pascal/workspace/leanote/:/home/pascal/workspace/leanote/ --rm leanote
 ```
 
+
+### Login
+
+You can specify a login / password inside a  .authors.yml file https://squidfunk.github.io/mkdocs-material/setup/setting-up-a-blog/#+blog.authors_file at the root of the mkdocumentation, although the default login / password is ```admin / abc123```.
+
+
+To specify the login / password ```squidfunk / def456```, compute a md5sum of this password and edit your .authors.yml file.
+
+```
+$ echo -n def456 | md5sum
+f26c2f431a8f57ae8013881556f8e279
+```
+
+```
+squidfunk:
+  password_hash: b71a4cd635e0ea3e43adcc1e0c755416
+```
+
+Multiple account is not implemented and only the password is checked against the password_hash.
 
 ## Leanote
 
