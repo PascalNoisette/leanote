@@ -91,7 +91,7 @@ func Init(url, dbname string) {
 		}
 		url = "mongodb://" + usernameAndPassword + host + ":" + port + "/" + dbname
 	}
-	Log(url)
+	fmt.Println(url)
 
 	// Use url as folder
 	dir, err := os.Open(url)
@@ -99,8 +99,12 @@ func Init(url, dbname string) {
 		panic(err)
 	}
 
+	mkdocs := &Mkdocs{Dir: dir}
+
 	// notebook
-	Notebooks = &FolderNotebooks{Name: "notebooks", Dir: dir, Fallback: &BsonReader{Name: "notebooks", Dir: dir}}
+	//Notebooks = &FolderNotebooks{Name: "notebooks", Dir: dir, Fallback: &BsonReader{Name: "notebooks", Dir: dir}}
+	//Notebooks = &BsonReader{Name: "notebooks", Dir: dir}
+	Notebooks = &FolderNotebooks{Name: "notebooks", Mkdocs: mkdocs}
 
 	// notes
 	Notes = &BsonReader{Name: "notes", Dir: dir}
@@ -115,7 +119,7 @@ func Init(url, dbname string) {
 	HasShareNotes = &BsonReader{Name: "has_share_notes", Dir: dir}
 
 	// user
-	Users = &FileUsers{Name: "users", Dir: dir, Fallback: &BsonReader{Name: "users", Dir: dir}}
+	Users = &FileUsers{Name: "users", Mkdocs: mkdocs, Fallback: &BsonReader{Name: "users", Dir: dir}}
 	// group
 	Groups = &BsonReader{Name: "groups", Dir: dir}
 	GroupUsers = &BsonReader{Name: "group_users", Dir: dir}
