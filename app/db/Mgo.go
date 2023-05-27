@@ -107,10 +107,11 @@ func Init(url, dbname string) {
 	Notebooks = &FolderNotebooks{Name: "notebooks", Mkdocs: mkdocs}
 
 	// notes
-	Notes = &BsonReader{Name: "notes", Dir: dir}
+	Notes = &FileNotes{Name: "notes", Mkdocs: mkdocs, FolderNotebooks: Notebooks}
+	//Notes = &BsonReader{Name: "notes", Dir: dir}
 
 	// noteContents
-	NoteContents = &BsonReader{Name: "note_contents", Dir: dir}
+	NoteContents = &FileNoteContents{Name: "note_contents", Mkdocs: mkdocs, FolderNotebooks: Notebooks, FileNotes: Notes}
 	NoteContentHistories = &BsonReader{Name: "note_content_histories", Dir: dir}
 
 	// share
