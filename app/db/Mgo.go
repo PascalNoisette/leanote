@@ -100,18 +100,19 @@ func Init(url, dbname string) {
 	}
 
 	mkdocs := &Mkdocs{Dir: dir}
+	writeHistory := &WriteHistory{OldIds: make(map[string]string)}
 
 	// notebook
 	//Notebooks = &FolderNotebooks{Name: "notebooks", Dir: dir, Fallback: &BsonReader{Name: "notebooks", Dir: dir}}
 	//Notebooks = &BsonReader{Name: "notebooks", Dir: dir}
-	Notebooks = &FolderNotebooks{Name: "notebooks", Mkdocs: mkdocs}
+	Notebooks = &FolderNotebooks{Name: "notebooks", Mkdocs: mkdocs, WriteHistory: writeHistory}
 
 	// notes
-	Notes = &FileNotes{Name: "notes", Mkdocs: mkdocs, FolderNotebooks: Notebooks}
+	Notes = &FileNotes{Name: "notes", Mkdocs: mkdocs, FolderNotebooks: Notebooks, WriteHistory: writeHistory}
 	//Notes = &BsonReader{Name: "notes", Dir: dir}
 
 	// noteContents
-	NoteContents = &FileNoteContents{Name: "note_contents", Mkdocs: mkdocs, FolderNotebooks: Notebooks, FileNotes: Notes}
+	NoteContents = &FileNoteContents{Name: "note_contents", Mkdocs: mkdocs, FolderNotebooks: Notebooks, FileNotes: Notes, WriteHistory: writeHistory}
 	NoteContentHistories = &BsonReader{Name: "note_content_histories", Dir: dir}
 
 	// share

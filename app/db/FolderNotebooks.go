@@ -15,26 +15,29 @@ type FolderNotebooks struct {
 	Mkdocs        *Mkdocs
 	Name          string // "collection"
 	CurrentFilter bson.M
+	WriteHistory  *WriteHistory
 }
 
 func (c *FolderNotebooks) FindId(id interface{}) CollectionLike {
 	//TODO
 	fmt.Println("FindId " + c.Name)
-	return &FolderNotebooks{Name: "notebooks", Mkdocs: c.Mkdocs, CurrentFilter: bson.M{"_id": id}}
+	return &FolderNotebooks{Name: "notebooks", Mkdocs: c.Mkdocs, CurrentFilter: bson.M{"_id": id}, WriteHistory: c.WriteHistory}
 }
 
 // Count returns the total number of documents in the collection.
 func (c *FolderNotebooks) Count() (n int, err error) {
 	//TODO
 	fmt.Println("Count " + c.Name)
-	return 1, err
+	notebooks := []info.Notebook{}
+	c.All(&notebooks)
+	return len(notebooks), err
 }
 
 func (c *FolderNotebooks) Find(query interface{}) CollectionLike {
 	//TODO
 	fmt.Println("Find " + c.Name)
 	fmt.Println(query)
-	return &FolderNotebooks{Name: "notebooks", Mkdocs: c.Mkdocs, CurrentFilter: query.(bson.M)}
+	return &FolderNotebooks{Name: "notebooks", Mkdocs: c.Mkdocs, CurrentFilter: query.(bson.M), WriteHistory: c.WriteHistory}
 }
 func (c *FolderNotebooks) Skip(n int) CollectionLike {
 	//TODO
@@ -73,14 +76,12 @@ func (c *FolderNotebooks) One(result interface{}) (err error) {
 	//TODO
 	fmt.Println("One " + c.Name)
 	notebooks := []info.Notebook{}
-	id := c.CurrentFilter["_id"]
-	(&FolderNotebooks{Name: "notebooks", Mkdocs: c.Mkdocs}).All(&notebooks)
+	fmt.Println(c.CurrentFilter)
+	c.All(&notebooks)
 	for _, notebook := range notebooks {
-		if id == notebook.NotebookId {
-			valuePtr := reflect.ValueOf(result)
-			valuePtr.Elem().Set(reflect.ValueOf(notebook))
-			break
-		}
+		valuePtr := reflect.ValueOf(result)
+		valuePtr.Elem().Set(reflect.ValueOf(notebook))
+		break
 	}
 	return nil
 }
@@ -92,6 +93,20 @@ func (c *FolderNotebooks) All(result interface{}) error {
 
 	files := c.Mkdocs.WalkDirectory()
 	for i, file := range files {
+
+		_, filterIsSet := c.CurrentFilter["UrlTitle"]
+		if filterIsSet && c.CurrentFilter["UrlTitle"] != file.Name {
+			continue
+		}
+		_, filterIdIsSet := c.CurrentFilter["_id"]
+
+		if filterIdIsSet {
+			_, filterByObjectId := c.CurrentFilter["_id"].(bson.ObjectId)
+			if filterByObjectId && c.WriteHistory.GetRealId(c.CurrentFilter["_id"]) != bson.ObjectId(lea.Md5(file.Name)[:12]).Hex() {
+				continue
+			}
+		}
+
 		notebook := info.Notebook{}
 		notebook.NotebookId = bson.ObjectId(lea.Md5(file.Name)[:12])
 		notebook.Title = file.Name
@@ -117,6 +132,10 @@ func (c *FolderNotebooks) UpdateAll(selector interface{}, update interface{}) (i
 func (c *FolderNotebooks) Insert(docs ...interface{}) error {
 	//TODO
 	fmt.Println("Insert " + c.Name)
+	for _, doc := range docs {
+		c.Mkdocs.createDirectory(doc.(info.Notebook).Title)
+		c.WriteHistory.RenameObjectId(doc.(info.Notebook).NotebookId, bson.ObjectId(lea.Md5(doc.(info.Notebook).Title)[:12]).Hex())
+	}
 	return nil
 }
 

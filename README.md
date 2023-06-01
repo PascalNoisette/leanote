@@ -38,15 +38,10 @@ squidfunk:
 
 Notebook correspond to a level-1 subfolder inside the mkdocs https://squidfunk.github.io/mkdocs-material/getting-started/ folder.
 
-- [ ] Notebook creation is not implemented.
-
 ### Note and its content
 
 Note correspond to a markdown file inside a mkdocs project https://squidfunk.github.io/mkdocs-material/getting-started/ subfolder.
 
-
-- [ ] Note editor is not implemented.
-- [ ] Note creation is not implemented.
 
 ## Leanote
 

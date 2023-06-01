@@ -18,13 +18,14 @@ type FileNoteContents struct {
 	CurrentFilter   bson.M
 	FolderNotebooks CollectionLike
 	FileNotes       CollectionLike
+	WriteHistory    *WriteHistory
 }
 
 func (c *FileNoteContents) FindId(id interface{}) CollectionLike {
 	//TODO
 	fmt.Println("FindId" + c.Name)
 	fmt.Println(id)
-	return &FileNoteContents{Name: "note_contents", Mkdocs: c.Mkdocs, CurrentFilter: bson.M{"_id": id}}
+	return &FileNoteContents{Name: "note_contents", Mkdocs: c.Mkdocs, CurrentFilter: bson.M{"_id": id}, FileNotes: c.FileNotes, FolderNotebooks: c.FolderNotebooks, WriteHistory: c.WriteHistory}
 }
 
 // Count returns the total number of documents in the collection.
@@ -37,7 +38,7 @@ func (c *FileNoteContents) Count() (n int, err error) {
 func (c *FileNoteContents) Find(query interface{}) CollectionLike {
 	//TODO
 	fmt.Println("Find" + c.Name)
-	return &FileNoteContents{Name: "note_contents", Mkdocs: c.Mkdocs, CurrentFilter: query.(bson.M)}
+	return &FileNoteContents{Name: "note_contents", Mkdocs: c.Mkdocs, CurrentFilter: query.(bson.M), FileNotes: c.FileNotes, FolderNotebooks: c.FolderNotebooks, WriteHistory: c.WriteHistory}
 }
 func (c *FileNoteContents) Skip(n int) CollectionLike {
 	//TODO
@@ -86,11 +87,13 @@ func (c *FileNoteContents) One(result interface{}) (err error) {
 	notebooks := c.Mkdocs.WalkDirectory()
 	for _, notebook := range notebooks {
 		for _, file := range notebook.Mardowns {
-			if c.CurrentFilter["_id"] == bson.ObjectId(lea.Md5(notebook.Name + file.Name)[:12]) {
+			if c.WriteHistory.GetRealId(c.CurrentFilter["_id"]) == bson.ObjectId(lea.Md5(notebook.Name + file.Name)[:12]).Hex() {
 				data, err := ioutil.ReadFile(file.FilePath)
 				if err != nil {
 					fmt.Fprintf(os.Stderr, "file "+file.FilePath+" not found\n")
 					return nil
+				} else {
+					fmt.Fprintf(os.Stderr, "read file "+file.FilePath+"\n")
 				}
 				result.(*info.NoteContent).Content = string(data)
 				result.(*info.NoteContent).NoteId = c.CurrentFilter["_id"].(bson.ObjectId)
@@ -132,8 +135,13 @@ func (c *FileNoteContents) Insert(docs ...interface{}) error {
 func (c *FileNoteContents) Update(selector interface{}, update interface{}) error {
 	//TODO
 	fmt.Println("Update" + c.Name)
-	fmt.Println(selector)
-	fmt.Println(update)
+	//fmt.Println(selector)
+	//fmt.Println(update)
+	note := info.NoteContent{
+		NoteId:  selector.(bson.M)["_id"].(bson.ObjectId),
+		Content: update.(bson.M)["$set"].(bson.M)["Content"].(string),
+	}
+	c.Insert(note)
 	return nil
 }
 

@@ -16,14 +16,14 @@ type FileNotes struct {
 	Name            string // "collection"
 	CurrentFilter   bson.M
 	FolderNotebooks CollectionLike
-	writeHistory    map[string]string
+	WriteHistory    *WriteHistory
 }
 
 func (c *FileNotes) FindId(id interface{}) CollectionLike {
 	//TODO
 	fmt.Println("FindId" + c.Name)
 	fmt.Println(id)
-	return &FileNotes{Name: "notes", Mkdocs: c.Mkdocs, CurrentFilter: bson.M{"_id": id}}
+	return &FileNotes{Name: "notes", Mkdocs: c.Mkdocs, CurrentFilter: bson.M{"_id": id}, FolderNotebooks: c.FolderNotebooks, WriteHistory: c.WriteHistory}
 }
 
 // Count returns the total number of documents in the collection.
@@ -39,7 +39,7 @@ func (c *FileNotes) Find(query interface{}) CollectionLike {
 	//TODO
 	fmt.Println("Find" + c.Name)
 	fmt.Println(query)
-	return &FileNotes{Name: "notes", Mkdocs: c.Mkdocs, CurrentFilter: query.(bson.M)}
+	return &FileNotes{Name: "notes", Mkdocs: c.Mkdocs, CurrentFilter: query.(bson.M), FolderNotebooks: c.FolderNotebooks, WriteHistory: c.WriteHistory}
 }
 func (c *FileNotes) Skip(n int) CollectionLike {
 	//TODO
@@ -113,16 +113,7 @@ func (c *FileNotes) All(result interface{}) error {
 			noteId := bson.ObjectId(lea.Md5(notebook.Name + file.Name)[:12])
 			_, filterUidIsSet := c.CurrentFilter["_id"]
 
-			if filterUidIsSet {
-				newId, hasHistory := c.writeHistory[c.CurrentFilter["_id"].(bson.ObjectId).Hex()]
-				fmt.Println(c.writeHistory)
-				if hasHistory && newId == noteId.Hex() {
-					fmt.Println("history found")
-					filterUidIsSet = false
-				}
-			}
-
-			if filterUidIsSet && c.CurrentFilter["_id"].(bson.ObjectId).Hex() != noteId.Hex() {
+			if filterUidIsSet && c.WriteHistory.GetRealId(c.CurrentFilter["_id"]) != noteId.Hex() {
 				continue
 			}
 			_, filterUrlIsSet := c.CurrentFilter["UrlTitle"]
@@ -166,7 +157,7 @@ func (c *FileNotes) Insert(docs ...interface{}) error {
 		fmt.Println("wihthin notebook")
 		fmt.Println(notebook)
 		c.Mkdocs.WriteFile(notebook.Title, doc.(info.Note).Title, "")
-		c.writeHistory[doc.(info.Note).NoteId.Hex()] = bson.ObjectId(lea.Md5(notebook.Title + doc.(info.Note).Title)[:12]).Hex()
+		c.WriteHistory.RenameObjectId(doc.(info.Note).NoteId, bson.ObjectId(lea.Md5(notebook.Title + doc.(info.Note).Title)[:12]).Hex())
 	}
 	return nil
 }
