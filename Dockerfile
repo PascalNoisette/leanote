@@ -13,6 +13,7 @@ FROM node:9-alpine as node-builder
 COPY --from=go-builder /go/src/github.com/leanote/leanote /go/src/github.com/leanote/leanote
 
 RUN cd /go/src/github.com/leanote/leanote \
+    && npm config set unsafe-perm true \
     && npm install \
     && npm install -g gulp \
     && npm install gulp-minify-css \
