@@ -50,6 +50,7 @@ Uploaded files will be distributed into sub-directories of the `images` folder s
 
 All File belong to the current user.
 
+You must copy all leanote static files to the `images` folder.
 
 ## Leanote
 

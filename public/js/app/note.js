@@ -1987,7 +1987,8 @@ var Attach = {
 		self.attachListO.on("click", ".download-attach", function(e) {
 			e.stopPropagation();
 			var attachId = $(this).closest('li').data("id");
-			Note.download("/attach/download", {attachId:attachId});
+			var attach = self.attachsMap[attachId];
+			Note.download(attach.Path, {});
 		});
 		// 下载全部
 		self.downloadAllBtnO.click(function() {
@@ -1999,7 +2000,7 @@ var Attach = {
 			e.stopPropagation();
 			var attachId = $(this).closest('li').data("id");
 			var attach = self.attachsMap[attachId];
-			var src = UrlPrefix + "/api/file/getAttach?fileId=" + attachId;
+			var src = attach.Path;
 			Note.toggleWriteable();
 			if(LEA.isMarkdownEditor() && MD) {
 				MD.insertLink(src, attach.Title);
