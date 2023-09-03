@@ -270,6 +270,8 @@ var o = {
 				}
 				if(each.Path != "" && each.Path.substr(0, 7) == "upload/") {
 					var src = urlPrefix + "/" + each.Path;
+				} else if(each.Path != "" && each.Path.substr(0, 12) == "docs/images/") {
+					var src = urlPrefix + "/" + each.Path.substr(5);
 				} else {
 					var src = urlPrefix + "/api/file/getImage?fileId=" + each.FileId;
 				}
