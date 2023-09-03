@@ -6,12 +6,11 @@ import (
 	"reflect"
 
 	"github.com/leanote/leanote/app/info"
-	"github.com/leanote/leanote/app/lea"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )
 
-var GlobalUserId = bson.ObjectId(lea.Md5("admin")[:12])
+var GlobalUserId = bson.ObjectIdHex("5368c1aa99c37b029d000001")
 
 type FileUsers struct {
 	CollectionLike

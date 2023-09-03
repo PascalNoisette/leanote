@@ -110,7 +110,10 @@ func (c *ParsedAttachs) All(result interface{}) error {
 			f.UploadUserId = GlobalUserId
 			f.Name = filepath.Base(match[1])
 			f.Title = filepath.Base(match[1])
-			f.Type = filepath.Ext(match[1])[1:]
+			ext := filepath.Ext(match[1])
+			if len(ext) > 0 {
+				f.Type = filepath.Ext(match[1])[1:]
+			}
 			f.Path = match[1]
 
 			x := reflect.ValueOf(f)

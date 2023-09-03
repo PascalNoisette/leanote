@@ -95,6 +95,37 @@ func (c *Mkdocs) WalkDirectory() []Category {
 	return result
 }
 
+func (c *Mkdocs) listDirectory() []string {
+
+	dirs, err := ioutil.ReadDir(filepath.Join(c.Dir.Name(), "images"))
+	result := make([]string, 0, len(dirs))
+	if err != nil {
+		panic(err)
+	}
+	for _, dir := range dirs {
+		if dir.IsDir() {
+			result = append(result, dir.Name())
+		}
+	}
+	return result
+}
+
+func (c *Mkdocs) listAllFiles(album string) []string {
+	root := filepath.Join(c.Dir.Name(), "images", album)
+	result := make([]string, 0)
+	err := filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
+		if !info.IsDir() {
+			relpath, _ := filepath.Rel(c.Dir.Name(), path)
+			result = append(result, filepath.Join("docs", relpath))
+		}
+		return nil
+	})
+	if err != nil {
+		panic(err)
+	}
+	return result
+}
+
 func (c *Mkdocs) createDirectory(name string) {
 
 	err := os.Mkdir(filepath.Join(c.Dir.Name(), strings.Title(name)), 0755)

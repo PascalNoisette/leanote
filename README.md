@@ -3,13 +3,13 @@
 Replacement of backend database with markdown files organised in a  way to be compatible with mkdocs https://squidfunk.github.io/mkdocs-material/.
 
 This is a fork of https://github.com/leanote/leanote/ - Under GPL v2 and https://github.com/jim3ma/docker-leanote.git - Under Apache License Version 2.0
-The next two chapter are a backup of original readme of their respective project
+The last two chapter are a backup of original readme of their respective project
 
 ### Test with docker
 
 ```
 docker build . -t leanote
-docker run -p9000:9000 -v /home/pascal/workspace/leanote/:/home/pascal/workspace/leanote/ --rm leanote
+docker run -p9000:9000 -v /home/pascal/workspace/mkdocs/docs:/leanote/docs --rm leanote
 ```
 
 
@@ -41,6 +41,14 @@ Notebook correspond to a level-1 subfolder inside the mkdocs https://squidfunk.g
 ### Note and its content
 
 Note correspond to a markdown file inside a mkdocs project https://squidfunk.github.io/mkdocs-material/getting-started/ subfolder.
+
+### File, Attachement and Album
+
+All picture available in the `images` folder are available as file.
+Image quoted in the markdown content are listed as attachement.
+Uploaded files will be distributed into sub-directories of the `images` folder similarly to https://www.mediawiki.org/wiki/Manual:Configuring_file_uploads#Upload_directory. These will correspond to your albums.
+
+All File belong to the current user.
 
 
 ## Leanote
