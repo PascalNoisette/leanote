@@ -97,7 +97,7 @@ func (c *ParsedAttachs) All(result interface{}) error {
 		noteContent := info.NoteContent{}
 		c.FileNoteContents.FindId(c.CurrentFilter["NoteId"]).One(&noteContent)
 
-		re := regexp.MustCompile(`!\[.*?\]\((.*?)(?:\s".*?")?\)`)
+		re := regexp.MustCompile(`\[.*?\]\((\.\..*?)(?:\s".*?")?\)`)
 		matches := re.FindAllStringSubmatch(noteContent.Content, -1)
 		for _, match := range matches {
 			fmt.Println(match[1])
