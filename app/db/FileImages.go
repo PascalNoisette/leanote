@@ -16,12 +16,13 @@ type FileImages struct {
 	Mkdocs        *Mkdocs
 	Name          string // "collection"
 	CurrentFilter bson.M
+	WriteHistory  *WriteHistory
 }
 
 func (c *FileImages) FindId(id interface{}) CollectionLike {
 	//TODO
 	fmt.Println("FindId " + c.Name)
-	return &FileImages{Name: c.Name, Mkdocs: c.Mkdocs, CurrentFilter: bson.M{"_id": id}}
+	return &FileImages{Name: c.Name, Mkdocs: c.Mkdocs, CurrentFilter: bson.M{"_id": id}, WriteHistory: c.WriteHistory}
 }
 
 // Count returns the total number of documents in the collection.
@@ -37,7 +38,7 @@ func (c *FileImages) Find(query interface{}) CollectionLike {
 	//TODO
 	fmt.Println("Find " + c.Name)
 	fmt.Println(query)
-	return &FileImages{Name: c.Name, Mkdocs: c.Mkdocs, CurrentFilter: query.(bson.M)}
+	return &FileImages{Name: c.Name, Mkdocs: c.Mkdocs, CurrentFilter: query.(bson.M), WriteHistory: c.WriteHistory}
 }
 func (c *FileImages) Skip(n int) CollectionLike {
 	//TODO
@@ -116,7 +117,7 @@ func (c *FileImages) All(result interface{}) error {
 			}
 			fileId := bson.ObjectId(lea.Md5(name)[:12])
 			_, fileIdIsSet := c.CurrentFilter["_id"]
-			if fileIdIsSet && c.CurrentFilter["_id"].(bson.ObjectId).Hex() != fileId.Hex() {
+			if fileIdIsSet && c.WriteHistory.GetRealId(c.CurrentFilter["_id"]) != fileId.Hex() {
 				continue
 			}
 
@@ -146,6 +147,10 @@ func (c *FileImages) UpdateAll(selector interface{}, update interface{}) (info *
 func (c *FileImages) Insert(docs ...interface{}) error {
 	//TODO
 	fmt.Println("Insert " + c.Name)
+	for _, doc := range docs {
+		name := c.Mkdocs.WriteImage(doc.(info.File).Title, doc.(info.File).Path)
+		c.WriteHistory.RenameObjectId(doc.(info.File).FileId, bson.ObjectId(lea.Md5(name)[:12]).Hex())
+	}
 	return nil
 }
 

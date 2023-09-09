@@ -147,7 +147,7 @@ func Init(url, dbname string) {
 
 	// Album & file
 	Albums = &FolderImages{Name: "albums", Mkdocs: mkdocs}
-	Files = &FileImages{Name: "files", Mkdocs: mkdocs}
+	Files = &FileImages{Name: "files", Mkdocs: mkdocs, WriteHistory: writeHistory}
 	Attachs = &ParsedAttachs{Name: "attachs", Mkdocs: mkdocs, FileNoteContents: NoteContents}
 
 	NoteImages = &BsonReader{Name: "note_images", Dir: dir}

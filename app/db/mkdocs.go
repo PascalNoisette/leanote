@@ -10,6 +10,8 @@ import (
 	"time"
 	"unicode"
 
+	"github.com/leanote/leanote/app/lea"
+	"github.com/revel/revel"
 	"gopkg.in/yaml.v3"
 )
 
@@ -133,6 +135,20 @@ func (c *Mkdocs) createDirectory(name string) {
 	if err != nil {
 		panic(err)
 	}
+}
+
+func (c *Mkdocs) WriteImage(basename string, path string) string {
+	md5path := lea.Md5(basename)
+	imageDir := filepath.Join(c.Dir.Name(), "images", md5path[:1], md5path[:2])
+	lea.MkdirAll(imageDir)
+	destFile := filepath.Join(imageDir, basename)
+	srcFile := filepath.Join(revel.BasePath, path)
+	fmt.Println(srcFile + " -> " + destFile)
+	_, err := lea.CopyFile(srcFile, destFile)
+	if err != nil {
+		panic(err)
+	}
+	return strings.Trim(strings.Replace(destFile, revel.BasePath, "", 1), "/")
 }
 
 func (c *Mkdocs) WriteFile(notebook string, filename string, Content string) {

@@ -7,8 +7,6 @@ import (
 	"regexp"
 
 	"github.com/leanote/leanote/app/info"
-	"github.com/leanote/leanote/app/lea"
-	"github.com/revel/revel"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )
@@ -135,13 +133,7 @@ func (c *ParsedAttachs) Insert(docs ...interface{}) error {
 	//TODO
 	fmt.Println("Insert " + c.Name)
 	for _, doc := range docs {
-		md5path := lea.Md5(doc.(info.Attach).Title)
-		imageDir := filepath.Join(c.Mkdocs.Dir.Name(), "images", md5path[:1], md5path[:2])
-		lea.MkdirAll(imageDir)
-		destFile := filepath.Join(imageDir, doc.(info.Attach).Title)
-		srcFile := filepath.Join(revel.BasePath, doc.(info.Attach).Path)
-		fmt.Println(srcFile + " -> " + destFile)
-		lea.CopyFile(srcFile, destFile)
+		c.Mkdocs.WriteImage(doc.(info.Attach).Title, doc.(info.Attach).Path)
 	}
 	return nil
 }
