@@ -2,7 +2,10 @@ package db
 
 import (
 	"fmt"
+	"io/ioutil"
 	"reflect"
+	"regexp"
+	"strings"
 
 	"github.com/leanote/leanote/app/info"
 	"github.com/leanote/leanote/app/lea"
@@ -120,6 +123,41 @@ func (c *FileNotes) All(result interface{}) error {
 			if filterUrlIsSet && c.CurrentFilter["UrlTitle"] != file.Name {
 				continue
 			}
+
+			content, _ := ioutil.ReadFile(file.FilePath)
+
+			tags := c.Mkdocs.GetTags(content)
+			_, filterTagsIsSet := c.CurrentFilter["Tags"]
+			if filterTagsIsSet && !c.Mkdocs.Contains(tags, c.CurrentFilter["Tags"].(bson.M)["$all"].([]string)[0]) {
+				continue
+			}
+
+			_, filterOrSet := c.CurrentFilter["$or"]
+			if filterOrSet {
+				// text search NoteService.SearchNote
+				_, searchText := c.CurrentFilter["$or"].([]bson.M)[0]["Title"]
+				if searchText {
+					re := regexp.MustCompile(c.CurrentFilter["$or"].([]bson.M)[0]["Title"].(bson.M)["$regex"].(bson.RegEx).Pattern)
+					if re.FindSubmatchIndex(content) == nil && re.FindSubmatchIndex([]byte(file.Name)) == nil {
+						continue
+					}
+
+				}
+			}
+
+			ImgSrc := ""
+			re := regexp.MustCompile(`!\[.*?\]\((.*?)(?:\s".*?")?\)`)
+			match := re.FindStringSubmatch(string(content))
+			if len(match) > 0 {
+				ImgSrc = match[1]
+			}
+			var Desc []string
+			re = regexp.MustCompile(`(?m)^#+\s+(.+)$`)
+			matches := re.FindAllStringSubmatch(string(content), -1)
+			for _, match := range matches {
+				Desc = append(Desc, match[1])
+			}
+
 			note := info.Note{}
 			note.NoteId = noteId
 			note.NotebookId = notebookId
@@ -131,6 +169,9 @@ func (c *FileNotes) All(result interface{}) error {
 			note.IsTrash = false
 			note.CreatedTime = file.ModTime
 			note.UpdatedTime = file.ModTime
+			note.Tags = tags
+			note.ImgSrc = ImgSrc
+			note.Desc = strings.Join(Desc, ", ")
 			x := reflect.ValueOf(note)
 			nodelist.Set(reflect.Append(nodelist, x))
 		}

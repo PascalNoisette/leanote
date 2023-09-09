@@ -131,7 +131,7 @@ func Init(url, dbname string) {
 
 	// tag
 	Tags = &BsonReader{Name: "tags", Dir: dir}
-	NoteTags = &BsonReader{Name: "note_tags", Dir: dir}
+	NoteTags = &ParsedTags{Name: "note_tags", Mkdocs: mkdocs, FileNoteContents: NoteContents}
 	TagCounts = &BsonReader{Name: "tag_count", Dir: dir}
 
 	// blog

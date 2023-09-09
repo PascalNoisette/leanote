@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
 	"time"
 	"unicode"
@@ -144,4 +145,29 @@ func (c *Mkdocs) WriteFile(notebook string, filename string, Content string) {
 	if err != nil {
 		panic(err)
 	}
+}
+
+func (c *Mkdocs) GetTags(data []byte) []string {
+	tags := make([]string, 0)
+	re := regexp.MustCompile(`tags: \[(.+)\]`)
+
+	match := re.FindStringSubmatch(string(data))
+	if len(match) < 1 {
+		return tags
+	}
+	parts := strings.Split(match[1], ",")
+	for _, part := range parts {
+		tags = append(tags, strings.Trim(part, " "))
+	}
+	return tags
+}
+
+func (c *Mkdocs) Contains(tags []string, search string) bool {
+	found := false
+	for _, tag := range tags {
+		if tag == search {
+			found = true
+		}
+	}
+	return found
 }
