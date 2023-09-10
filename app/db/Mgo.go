@@ -5,6 +5,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/leanote/leanote/app/info"
 	. "github.com/leanote/leanote/app/lea"
 	"github.com/revel/revel"
 	"gopkg.in/mgo.v2/bson"
@@ -139,8 +140,6 @@ func Init(url, dbname string) {
 	BlogSingles = &BsonReader{Name: "blog_singles", Dir: dir}
 	Themes = &BsonReader{Name: "themes", Dir: dir}
 
-	// find password
-	Tokens = &BsonReader{Name: "tokens", Dir: dir}
 
 	// Suggestion
 	Suggestions = &BsonReader{Name: "suggestions", Dir: dir}
@@ -163,7 +162,8 @@ func Init(url, dbname string) {
 	Reports = &BsonReader{Name: "reports", Dir: dir}
 
 	// mgo.Session
-	Sessions = &BsonReader{Name: "sessions", Dir: dir}
+	Sessions = &InMemorySessions{Name: "sessions", database: make(map[string]info.Session)}
+	Tokens = Sessions
 }
 
 func close() {
