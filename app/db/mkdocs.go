@@ -152,9 +152,6 @@ func (c *Mkdocs) WriteImage(basename string, path string) string {
 }
 
 func (c *Mkdocs) WriteFile(notebook string, filename string, Content string) {
-	if !strings.HasSuffix(filename, ".md") {
-		filename = filename + ".md"
-	}
 	fullpath := filepath.Join(c.Dir.Name(), strings.Title(notebook), filename)
 	fmt.Println("write " + fullpath)
 	err := ioutil.WriteFile(fullpath, []byte(Content), 0755)
