@@ -106,6 +106,10 @@ func (c *FileNotes) All(result interface{}) error {
 	notebooks := c.Mkdocs.WalkDirectory()
 	fmt.Println("filter " + c.Name)
 	fmt.Println(c.CurrentFilter)
+	_, filterBlog := c.CurrentFilter["IsBlog"]
+	if  filterBlog {
+		return nil
+	}
 	for _, notebook := range notebooks {
 		notebookId := bson.ObjectId(lea.Md5(notebook.Name)[:12])
 		_, filterNidIsSet := c.CurrentFilter["NotebookId"]
@@ -184,6 +188,24 @@ func (c *FileNotes) UpdateAll(selector interface{}, update interface{}) (info *m
 	fmt.Println("UpdateAll" + c.Name)
 	fmt.Println(selector)
 	fmt.Println(update)
+	filterId, filterUidIsSet := selector.(bson.M)["_id"]
+	_, isSetOperation := update.(bson.M)["$set"]
+	if filterUidIsSet && isSetOperation {
+		_, trash := update.(bson.M)["$set"].(bson.M)["IsTrash"]
+		if trash {
+			notebooks := c.Mkdocs.WalkDirectory()
+			for _, notebook := range notebooks {
+				for _, file := range notebook.Mardowns {
+					noteId := bson.ObjectId(lea.Md5(notebook.Name + file.Name)[:12])
+
+					if filterId.(bson.ObjectId).Hex() != noteId.Hex() {
+						continue
+					}
+					lea.DeleteFile(file.FilePath)
+				}
+			}
+		}
+	}
 	info = &mgo.ChangeInfo{Updated: 1}
 	return info, err
 }
@@ -204,11 +226,8 @@ func (c *FileNotes) Insert(docs ...interface{}) error {
 }
 
 func (c *FileNotes) Update(selector interface{}, update interface{}) error {
-	//TODO
-	fmt.Println("Update" + c.Name)
-	fmt.Println(selector)
-	fmt.Println(update)
-	return nil
+	_, err := c.UpdateAll(selector, update)
+	return err
 }
 
 func (c *FileNotes) Upsert(selector interface{}, update interface{}) (info *mgo.ChangeInfo, err error) {

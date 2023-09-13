@@ -91,6 +91,11 @@ func (c *FolderNotebooks) All(result interface{}) error {
 	valuePtr := reflect.ValueOf(result)
 	nodelist := valuePtr.Elem()
 
+	_, filterBlog := c.CurrentFilter["IsBlog"]
+	if  filterBlog {
+		return nil
+	}
+
 	files := c.Mkdocs.WalkDirectory()
 	for i, file := range files {
 
@@ -105,6 +110,12 @@ func (c *FolderNotebooks) All(result interface{}) error {
 			if filterByObjectId && c.WriteHistory.GetRealId(c.CurrentFilter["_id"]) != bson.ObjectId(lea.Md5(file.Name)[:12]).Hex() {
 				continue
 			}
+		}
+
+		_, filterByParent := c.CurrentFilter["ParentNotebookId"]
+		if filterByParent {
+			// no parent implemented
+			continue
 		}
 
 		notebook := info.Notebook{}
@@ -126,6 +137,23 @@ func (c *FolderNotebooks) UpdateAll(selector interface{}, update interface{}) (i
 	//TODO
 	info = &mgo.ChangeInfo{Updated: 1}
 	fmt.Println("UpdateAll" + c.Name)
+	fmt.Println(selector)
+	fmt.Println(update)
+	filterId, filterUidIsSet := selector.(bson.M)["_id"]
+	_, isSetOperation := update.(bson.M)["$set"]
+	if filterUidIsSet && isSetOperation {
+		_, delete := update.(bson.M)["$set"].(bson.M)["IsDeleted"]
+		if delete {
+			notebooks := c.Mkdocs.WalkDirectory()
+			for _, notebook := range notebooks {
+				notebookId := bson.ObjectId(lea.Md5(notebook.Name)[:12])
+				if filterId.(bson.ObjectId).Hex() != notebookId.Hex() {
+					continue
+				}
+				lea.DeleteFile(notebook.FilePath)
+			}
+		}
+	}
 	return info, err
 }
 
@@ -141,8 +169,8 @@ func (c *FolderNotebooks) Insert(docs ...interface{}) error {
 
 func (c *FolderNotebooks) Update(selector interface{}, update interface{}) error {
 	//TODO
-	fmt.Println("Update " + c.Name)
-	return nil
+	_, err := c.UpdateAll(selector, update)
+	return err
 }
 
 func (c *FolderNotebooks) Upsert(selector interface{}, update interface{}) (info *mgo.ChangeInfo, err error) {
