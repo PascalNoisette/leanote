@@ -6,6 +6,7 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"strconv"
 	"strings"
 	"time"
 	"unicode"
@@ -47,7 +48,7 @@ func (c *Mkdocs) ReadAuthorFile() map[string]Author {
 	data, err := ioutil.ReadFile(filePath)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, ".authors.yml not found\n")
-		return nil
+		return map[string]Author{"admin": {Name: "admin", Pwd: "e99a18c428cb38d5f260853678922e03"}}
 	}
 
 	var m map[string]Author
@@ -138,6 +139,11 @@ func (c *Mkdocs) createDirectory(name string) {
 }
 
 func (c *Mkdocs) WriteImage(basename string, path string) string {
+	base, _ := lea.SplitFilename(basename)
+	if _, err := strconv.ParseFloat(base, 64); err == nil {
+		// replace to avoid colision (every image from api are called "0.jpeg"...)
+		basename = filepath.Base(path)
+	}
 	md5path := lea.Md5(basename)
 	imageDir := filepath.Join(c.Dir.Name(), "images", md5path[:1], md5path[:2])
 	lea.MkdirAll(imageDir)
