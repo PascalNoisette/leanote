@@ -10,13 +10,12 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
-var GlobalUserId = bson.ObjectIdHex("5368c1aa99c37b029d000001")
+var GlobalUserId = bson.NewObjectId()
 
 type FileUsers struct {
 	CollectionLike
-	Name     string // "collection"
-	Fallback CollectionLike
-	Mkdocs   *Mkdocs
+	Name   string // "collection"
+	Mkdocs *Mkdocs
 }
 
 func (c *FileUsers) FindId(id interface{}) CollectionLike {
@@ -62,26 +61,25 @@ func (c *FileUsers) Distinct(key string, result interface{}) error {
 }
 
 func (c *FileUsers) One(result interface{}) (err error) {
-	c.Fallback.One(result)
-	var m = c.Mkdocs.ReadAuthorFile()
-	for k, v := range m {
-		c.DeepCopy(k, v, result.(*info.User))
+	users := []info.User{}
+	c.All(&users)
+	for _, u := range users {
+		valuePtr := reflect.ValueOf(result)
+		valuePtr.Elem().Set(reflect.ValueOf(u))
 		break
 	}
 	return nil
 }
 
 func (c *FileUsers) All(result interface{}) error {
-	fallbackData := info.User{}
-	c.Fallback.One(&fallbackData)
-
 	var m = c.Mkdocs.ReadAuthorFile()
 
 	valuePtr := reflect.ValueOf(result)
 	nodelist := valuePtr.Elem()
 	for k, v := range m {
-		c.DeepCopy(k, v, &fallbackData)
-		x := reflect.ValueOf(fallbackData)
+		user := info.User{}
+		c.DeepCopy(k, v, &user)
+		x := reflect.ValueOf(user)
 		nodelist.Set(reflect.Append(nodelist, x))
 	}
 	return nil
@@ -90,6 +88,7 @@ func (c *FileUsers) DeepCopy(username string, in Author, out *info.User) {
 	out.Username = username
 	out.UsernameRaw = username
 	out.UserId = GlobalUserId
+	out.Email = username
 	if len(in.Pwd) == 32 {
 		out.Pwd = in.Pwd
 	} else {

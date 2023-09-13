@@ -122,7 +122,7 @@ func Init(url, dbname string) {
 	HasShareNotes = &BsonReader{Name: "has_share_notes", Dir: dir}
 
 	// user
-	Users = &FileUsers{Name: "users", Mkdocs: mkdocs, Fallback: &BsonReader{Name: "users", Dir: dir}}
+	Users = &FileUsers{Name: "users", Mkdocs: mkdocs}
 	// group
 	Groups = &BsonReader{Name: "groups", Dir: dir}
 	GroupUsers = &BsonReader{Name: "group_users", Dir: dir}
@@ -139,7 +139,6 @@ func Init(url, dbname string) {
 	UserBlogs = &BsonReader{Name: "user_blogs", Dir: dir}
 	BlogSingles = &BsonReader{Name: "blog_singles", Dir: dir}
 	Themes = &BsonReader{Name: "themes", Dir: dir}
-
 
 	// Suggestion
 	Suggestions = &BsonReader{Name: "suggestions", Dir: dir}
