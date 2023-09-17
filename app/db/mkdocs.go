@@ -138,6 +138,13 @@ func (c *Mkdocs) createDirectory(name string) {
 	}
 }
 
+func (c *Mkdocs) RenameInPath(fullpath string, newTitle string) error {
+	parent := filepath.Dir(fullpath)
+	dest := filepath.Join(parent, newTitle)
+	err := os.Rename(fullpath, dest)
+	return err
+}
+
 func (c *Mkdocs) WriteImage(basename string, path string) string {
 	base, _ := lea.SplitFilename(basename)
 	if _, err := strconv.ParseFloat(base, 64); err == nil {

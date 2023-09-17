@@ -107,7 +107,7 @@ func (c *FileNotes) All(result interface{}) error {
 	fmt.Println("filter " + c.Name)
 	fmt.Println(c.CurrentFilter)
 	_, filterBlog := c.CurrentFilter["IsBlog"]
-	if  filterBlog {
+	if filterBlog {
 		return nil
 	}
 	for _, notebook := range notebooks {
@@ -191,17 +191,26 @@ func (c *FileNotes) UpdateAll(selector interface{}, update interface{}) (info *m
 	filterId, filterUidIsSet := selector.(bson.M)["_id"]
 	_, isSetOperation := update.(bson.M)["$set"]
 	if filterUidIsSet && isSetOperation {
-		_, trash := update.(bson.M)["$set"].(bson.M)["IsTrash"]
-		if trash {
-			notebooks := c.Mkdocs.WalkDirectory()
-			for _, notebook := range notebooks {
-				for _, file := range notebook.Mardowns {
-					noteId := bson.ObjectId(lea.Md5(notebook.Name + file.Name)[:12])
 
-					if filterId.(bson.ObjectId).Hex() != noteId.Hex() {
-						continue
-					}
+		notebooks := c.Mkdocs.WalkDirectory()
+		for _, notebook := range notebooks {
+			for _, file := range notebook.Mardowns {
+				noteId := bson.ObjectId(lea.Md5(notebook.Name + file.Name)[:12])
+
+				if c.WriteHistory.GetRealId(filterId) != noteId.Hex() {
+					continue
+				}
+				_, trash := update.(bson.M)["$set"].(bson.M)["IsTrash"]
+				if trash {
 					lea.DeleteFile(file.FilePath)
+				}
+				newTitle, rename := update.(bson.M)["$set"].(bson.M)["Title"]
+				if rename {
+					err := c.Mkdocs.RenameInPath(file.FilePath, newTitle.(string))
+					if err == nil {
+						lea.DeleteFile(file.FilePath)
+						c.WriteHistory.RenameObjectId(noteId, bson.ObjectId(lea.Md5(notebook.Name + newTitle.(string))[:12]).Hex())
+					}
 				}
 			}
 		}

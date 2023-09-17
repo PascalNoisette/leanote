@@ -16,9 +16,13 @@ func (c *WriteHistory) RenameObjectId(old bson.ObjectId, new string) {
 }
 
 func (c *WriteHistory) GetRealId(oldObjectId interface{}) string {
-	old := oldObjectId.(bson.ObjectId)
-	if newId, hasHistory := c.OldIds[old.Hex()]; hasHistory {
-		return newId
+	old := oldObjectId.(bson.ObjectId).Hex()
+	_, hasHistory := c.OldIds[old]
+	for hasHistory {
+		if _, hasHistory := c.OldIds[old]; !hasHistory {
+			break
+		}
+		old = c.OldIds[old]
 	}
-	return old.Hex()
+	return old
 }
